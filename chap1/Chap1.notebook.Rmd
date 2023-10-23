@@ -1,0 +1,304 @@
+---
+title: "Chapter1_R Notebook"
+author: "WuKunpeng"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(conflicted)
+# conflicted 包可以将两个包冲突的函数进行报错, 以便使用正确的函数
+```
+
+```{r}
+# Basic data type
+class(TRUE)             # 逻辑值
+class(32.6)             # 普通的数字类型
+class(2L)               # 2L是特指此为整数integer(显式表示),
+                        # 与numeric型的存储方式会有细微的差别
+class('a')              # 字符类型
+class("aaaaa")          # 字符串,也是字符型
+class(3+2i)             # 复数类型
+class(charToRaw("a"))   # Raw为原始类型数据,为二进制
+```
+
+```{r}
+# 数值向量
+x = 1.5
+x
+
+# 创建一个指定长度的全0数值向量
+vec <- numeric(10)
+vec
+
+# 利用 c() 将多个对象合并到一起
+c(1, 2, 3, 4, 5)
+c(1, 2, c(3, 4, 5))
+```
+
+```{r}
+
+list.1 <- list(name = "李明", age = 30, scores = c(85, 76, 90))
+
+list.1[2]
+list.1[[2]]
+list.1$scores
+
+list.1$age <- 45                     # 将age修改为45
+list.1$age
+
+list.1$age <- list(19, 29, 31)       # 将age修改为一个列表
+list.1$age[1]
+list.1$age[[1]]
+
+list.2 <- as.list(c(a = 1, b = 2))   # 用as.list()函数可以将向量转为列表
+list.2
+unlist(list.2)                       # 用unlist()可以将一个列表打破成分界限,
+                                     # 强制转换为一个向量
+```
+
+```{r}
+# 不按行填充
+matrix(c(1, 2, 3,
+		     4, 5, 6,
+		     7, 8, 9), 
+       nrow = 3,
+       byrow = FALSE)
+
+# 按行填充
+matrix(c(1, 2, 3,
+	    	 4, 5, 6,
+    		 7, 8, 9), nrow = 3, byrow = TRUE)
+
+# 为矩阵的行列命名
+matrix(1:9, 
+       nrow = 3, 
+       byrow = TRUE,
+	     dimnames = list(c("r1","r2","r3"), c("c1","c2","c3")))
+
+ml <- matrix(1:9, ncol = 3)
+rownames(ml) = c("r1","r2","r3")
+colnames(ml) = c("c1","c2","c3")
+
+# 特殊矩阵
+diag(1:4, nrow = 4)
+```
+
+```{r}
+ml[1,2]                           # 提取第1行, 第2列的单个元素
+ml[1:2, 2:3]                      # 提取第1至2行, 第2至3列的元素
+ml[c("r1","r3"), c("c1","c3")]    # 提取行名r1和r3, 列名为c1和c3的元素
+
+# 如果一个维度空缺, 则选出该维度的所有元素
+ml[1,]                            # 提取第1行, 所有列元素
+ml[,2:3]                          # 提取所有行, 第2至3列的所有元素
+
+# 负数表示排除该位置
+ml[-1,]                           # 提取除了第1行之外的所有元素
+ml[,-c(2,3)]                      # 提取除了第2和第3行之外的所有元素
+```
+
+```{r}
+# 创建tibble
+person <- tibble(
+	Name = c("Daisy", "Kyle", "Issac"),
+	Gender = c("Female", "Male", "Male"),
+	Age = c("20", "21", "27"),
+	Major = c("Remote sensing", "Data science", "Physics"),
+	ID = c("203", "301", "096")
+)
+# 在函数传递参数的时候不要用 <- 运算符, 
+# 因为 R 语言编译器会将这个操作解释为赋值
+# 而不是传递参数, 也就是传递的不是一个值, 而是一个操作, 
+# 可能会导致意外的错误
+person
+```
+
+```{r}
+tribble(
+	~Name, ~Gender, ~Age, ~Major, ~ID,
+	"Daisy", "Female", "20", "Remote sensing", "203",
+	"Kyle", "Male", "21", "Data science", "301",
+	"Issac", "Male", "27", "Physics", "096")
+```
+
+```{r}
+# rbind() 增加行(样本数据), 要求宽度(列数一致)
+person <- rbind(person,
+	              tibble(Name = "Jojo",
+	                     Gender = "Male",
+                       Age = 25, 
+			                 Major = "History", 
+			                 ID = "128"))
+
+# cbind() 增加列(属性变量), 要求高度一致
+person <- cbind(person, 
+	              Registered = c(TRUE, TRUE, FALSE, TRUE),
+	              Class_ID = c(2, 3, 4, 1))
+```
+
+```{r}
+# 可以用函数 str() 或者 glimpse() 显示该对象的结构
+str(person)
+glimpse(person)
+# 用 summary() 作用在数据框或者列表上,将生成割裂或各成分的汇总信息
+summary(person)
+```
+
+```{r}
+# 利用 expand.grid() 可以生成多个属性水平值的所有组合
+expand.grid(type = c("A","B"), class = c("M","L","XL"))
+```
+
+```{r}
+x = c(" 优", " 中", " 良", " 优", " 良", " 良") # 字符向量
+x
+sort(x)
+
+x1 = factor(x, levels = c(" 中", " 良", " 优")) # 转化因子型
+x1
+as.numeric(x1) # 相当于查看等级顺序, 数字越大等级越高
+sort(x1)
+
+ggplot(tibble(x1), aes(x1)) +
+  geom_bar()
+```
+
+```{r}
+levels(x1) = c("Fair", "Good", "Excellent") # 修改因子水平
+x1
+```
+
+```{r}
+table(x)
+```
+
+```{r}
+Age = c(23,15,36,47,65,53)
+cut(Age, 
+    breaks = c(0,18,45,100),
+    labels = c("Young","Middle","Old"))
+```
+
+```{r}
+tibble(Sex = gl(2, 3, length=12, labels=c(" 男"," 女")),
+       Class = gl(3, 2, length=12, labels=c(" 甲"," 乙"," 丙")),
+       Score = gl(4, 3, length=12, labels=c(" 优"," 良"," 中", " 及格")))
+```
+
+```{r}
+2 + 3
+2 * 3
+2 / 3
+2 - 3
+2 + 3 * 4
+2 + (3 * 4)
+2^2
+2^0.5
+v <- c( 2,5.5,6)
+s <- c(8, 3, 4)
+v^s
+v%%s
+v%/%s
+v <- c(2,5.5,6,9)
+s <- c(8,2.5,14,9)
+v>s
+v>s
+v>=s
+v<=s
+v==s
+v!=s
+(v>=s)&(v==s)
+(v>s)|(v==s)
+v <- 1:5
+5 %in% v
+v*t(v)
+v%*%t(v)
+```
+
+```{r}
+# 判断体函数
+x <- 30L
+if(is.integer(x)) {
+  print("X is an Integer")
+}
+
+x <- c("what","is","truth")
+
+if("Truth" %in% x) {
+  print("Truth is found")
+} else {
+  print("Truth is not found")
+}
+
+if("Truth" %in% x) {
+  print("Truth is found the first time")
+} else if ("truth" %in% x) {
+  print("truth is found the second time")
+} else {
+  print("No truth found")
+}
+
+x <- switch(
+  3,
+  "first",
+  "second",
+  "third",
+  "fourth"
+)
+print(x)
+```
+
+```{r}
+# 循环体函数
+v <- c("Hello","loop")
+cnt <- 2
+
+repeat {
+  print(v)
+  cnt <- cnt+1
+  
+  if(cnt > 5) {
+    break
+  }
+}
+
+v <- c("Hello","while loop")
+cnt <- 2
+
+while (cnt < 7) {
+  print(v)
+  cnt = cnt + 1
+}
+
+v <- LETTERS[1:4]
+for ( i in v) {
+  print(i)
+}
+```
+
+```{r}
+# 自定函数
+new.function1 <- function() {
+  for(i in 1:5) {
+    print(i^2)
+  }
+}	
+new.function1()
+
+new.function2 <- function(a,b,c) {
+  result <- a * b + c
+  print(result)
+}
+new.function1(5,3,11)
+new.function1(a = 11, b = 5, c = 3)
+
+new.function2 <- function(a = 3, b = 6) {
+  result <- a * b
+  print(result)
+}
+new.function2()
+new.function2(5)
+new.function2(b=5)
+```
+
