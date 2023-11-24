@@ -11,12 +11,8 @@
             "id": "e31d1e50e3986ec5",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Chap1/SUMMARY of Chap1.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "graph",
+              "state": {}
             }
           },
           {
@@ -31,8 +27,7 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -98,7 +93,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Chap1/R语言基础编程语法.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +109,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Chap1/R语言基础编程语法.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -137,9 +130,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "Chap1/R语言基础编程语法.md"
-              }
+              "state": {}
             }
           }
         ],
@@ -159,16 +150,16 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "5afc0f3511eb8756",
+  "active": "e31d1e50e3986ec5",
   "lastOpenFiles": [
-    "Chap1/变量及运算符号.md",
-    "Chap1/R语言基础编程语法.md",
-    "Chap1/数据类型.md",
-    "Chap1/SUMMARY of Chap1.md",
-    "未命名.md",
     "R语言空间数据处理与分析实践教程.md",
-    "Chap2/未命名.md",
+    "Chap1/数据类型.md",
+    "Chap1/R语言基础编程语法.md",
+    "Chap1/变量及运算符号.md",
+    "Chap1/SUMMARY of Chap1.md",
     "Chap2/SUMMARY of Chap2.md",
+    "未命名.md",
+    "Chap2/未命名.md",
     "index.md",
     "未命名.canvas",
     "Chap2",
